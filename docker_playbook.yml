@@ -3,40 +3,13 @@
   hosts: all
   become: yes
 
-  vars:
-    packages:
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - gnupg-agent
-    - software-properties-common    
-
-  tasks:
-  - name: Docker installation - installing prerequisites
-    ansible.builtin.apt:
-      name: "{{item}}"
-      update_cache: yes
-    with_items: 
-      - "{{packages}}"
-
-  - name: Docker installation - Adding apt-key
-    ansible.builtin.apt_key:
-      url: https://download.docker.com/linux/ubuntu/gpg
-
-  - name: Docker installation - Adding docker repo
-    ansible.builtin.apt_repository:
-      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu noble stable
-      state: present
-      update_cache: yes
-
-  - name: Update cache
-    ansible.builtin.apt:
-      update_cache: yes
-
-  - name: Docker installation - Installing Docker
+  - name: Apache installation
     ansible.builtin.apt:
       name:
-        - docker.io
-        - docker-ce-cli
-        - containerd.io
+        - apache2
       update_cache: yes
+
+  - name: Start service
+    ansible.builtin.service:
+      name: apache2
+      state: started
