@@ -1,7 +1,16 @@
 ---
 - name: Playbook
   hosts: all
+  become: yes
 
   tasks:
-  - name: Ping
-    ansible.builtin.ping:
+  - name: Apache installation
+    ansible.builtin.apt:
+      name:
+        - apache2
+      update_cache: yes
+
+  - name: Start service
+    ansible.builtin.service:
+      name: apache2
+      state: started
